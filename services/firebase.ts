@@ -11,8 +11,12 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-if (!firebaseConfig.apiKey) {
-    console.error("Firebase API Key is missing! Check your .env.local file.");
+// Validate config
+const requiredKeys = ['apiKey', 'authDomain', 'projectId', 'appId'];
+const missingKeys = requiredKeys.filter(key => !firebaseConfig[key as keyof typeof firebaseConfig]);
+
+if (missingKeys.length > 0) {
+    console.error(`Firebase configuration error: The following keys are missing: ${missingKeys.join(', ')}. Check your .env.local file.`);
 }
 
 const app = initializeApp(firebaseConfig);
