@@ -37,11 +37,20 @@ const SignIn = () => {
             navigate('/');
         } catch (err: any) {
             console.error('Login error:', err);
-            if (err.code === 'auth/user-not-found') setError('No account found with this email');
-            else if (err.code === 'auth/wrong-password') setError('Incorrect password');
-            else if (err.code === 'auth/invalid-email') setError('Invalid email address');
-            else if (err.code === 'auth/too-many-requests') setError('Too many attempts. Please try again later.');
-            else setError('Failed to log in. Please try again.');
+
+            // Comprehensive Firebase error code mapping
+            const errorMessages: Record<string, string> = {
+                'auth/user-not-found': 'No account found with this email',
+                'auth/wrong-password': 'Incorrect password',
+                'auth/invalid-email': 'Invalid email address',
+                'auth/too-many-requests': 'Too many attempts. Please try again later.',
+                'auth/invalid-credential': 'Invalid email or password',
+                'auth/user-disabled': 'This account has been disabled',
+                'auth/network-request-failed': 'Network error. Please check your connection.',
+                'auth/internal-error': 'An internal error occurred. Please try again.',
+            };
+
+            setError(errorMessages[err.code] || 'Failed to log in. Please try again.');
         } finally {
             setLoading(false);
         }
