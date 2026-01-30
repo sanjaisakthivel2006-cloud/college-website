@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RoleSelection from './components/RoleSelection';
 import StudentList from './components/StudentList';
 import Profile from './components/Profile';
@@ -17,7 +17,28 @@ const StudentSystem: React.FC = () => {
     const [students, setStudents] = useState<Student[]>(INITIAL_STUDENTS);
 
     const { t, language, setLanguage } = useLanguage();
-    const { logout, user } = useAuth();
+    const { logout, user, userData } = useAuth();
+
+    // Set initial view based on user role
+    useEffect(() => {
+        if (userData?.role) {
+            if (userData.role === 'ADMIN') {
+                setCurrentView('DASHBOARD_STAFF');
+            } else if (userData.role === 'STUDENT') {
+                // Try to find student by their studentId from registration
+                const studentProfile = students.find(
+                    s => s.regNo.toLowerCase() === (userData.studentId || '').toLowerCase()
+                );
+                if (studentProfile) {
+                    setCurrentStudent(studentProfile);
+                    setCurrentView('DASHBOARD_STUDENT');
+                } else {
+                    // Student not found in mock data, show home for now
+                    setCurrentView('HOME');
+                }
+            }
+        }
+    }, [userData, students]);
 
     // --- Handlers ---
 
