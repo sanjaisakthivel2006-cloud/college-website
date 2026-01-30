@@ -1,0 +1,5 @@
+{
+  "name": "UniCentral - Student Information System",
+  "description": "A centralized demo application for college staff to manage student profiles and for students to view their academic records, attendance, and fee status.",
+  "requestFramePermissions": []
+}
