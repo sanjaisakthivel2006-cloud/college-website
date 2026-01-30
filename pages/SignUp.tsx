@@ -9,7 +9,8 @@ const SignUp = () => {
         password: '',
         confirmPassword: '',
         name: '',
-        studentId: ''
+        studentId: '',
+        role: 'STUDENT' as 'STUDENT' | 'ADMIN'
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ const SignUp = () => {
         );
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
@@ -125,6 +126,19 @@ const SignUp = () => {
                         onChange={handleChange}
                         required
                     />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="role">I am a</label>
+                    <select
+                        id="role"
+                        name="role"
+                        value={formData.role}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="STUDENT">Student</option>
+                        <option value="ADMIN">Staff / Administrator</option>
+                    </select>
                 </div>
                 <button type="submit" disabled={loading}>
                     {loading ? 'Creating Account...' : 'Sign Up'}
